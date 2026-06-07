@@ -19,7 +19,7 @@ jobs:
 
       # 2. Terraform 설치
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        run: echo "Terraform already installed"
 
       # 3. terraform.tfvars 생성 (Secret에서 가져옴)
       - name: Create tfvars
