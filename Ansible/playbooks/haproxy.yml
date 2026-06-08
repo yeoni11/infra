@@ -3,4 +3,5 @@
   hosts: haproxy
   become: true
   roles:
+    - common
     - haproxy
