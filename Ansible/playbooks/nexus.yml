@@ -1,1 +1,6 @@
-
+---
+- name: Nexus | Sonatype Nexus 사설 저장소 구성
+  hosts: nexus
+  become: true
+  roles:
+    - nexus
