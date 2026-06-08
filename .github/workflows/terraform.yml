@@ -44,9 +44,7 @@ jobs:
       # 6. Terraform Apply (main 브랜치 push 할 때만 실행)
       - name: Terraform Apply
         run: terraform apply -auto-approve -parallelism=2  #> [!TIP]
-        working-directory: Terraform
-
-#> [!TIP]
-# ceph 스토리지는 ubuntu template으로부터 vm을 clone할 때 잠금(lock)을 건다.
-# 동시에 여러 vm을 clone하면 서로 lock 해제를 기다리다가 timeout이 나서 오류가 발생
-# 이른 방지하기 위해 -parallelism=2 옵션을 추가해준 것.
+        working-directory: Terraform                       # ceph 스토리지는 ubuntu template으로부터 vm을 clone할 때 잠금(lock)을 건다.
+                                                           # 동시에 여러 vm을 clone하면 서로 lock 해제를 기다리다가 timeout이 나서 오류가 발생
+                                                           # 이를 방지하기 위해 -parallelism=2 옵션을 추가해준 것.
+ 
