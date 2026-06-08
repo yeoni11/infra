@@ -1,1 +1,6 @@
-
+---
+- name: Vault | HashiCorp Vault 클러스터 구성
+  hosts: vault
+  become: true
+  roles:
+    - vault
