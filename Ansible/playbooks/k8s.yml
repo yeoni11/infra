@@ -1,1 +1,18 @@
+---
+- name: K8s Common | 쿠버네티스 공통 패키지 설치
+  hosts: k8s
+  become: true
+  roles:
+    - k8s_common
 
+- name: K8s Master | 마스터 노드 초기화
+  hosts: k8s_master
+  become: true
+  roles:
+    - k8s_master
+
+- name: K8s Worker | 워커 노드 클러스터 조인
+  hosts: k8s_worker
+  become: true
+  roles:
+    - k8s_worker
