@@ -3,4 +3,5 @@
   hosts: vault
   become: true
   roles:
+    - common
     - vault
