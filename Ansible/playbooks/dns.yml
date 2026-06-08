@@ -3,4 +3,5 @@
   hosts: dns
   become: true
   roles:
+    - common
     - dns
