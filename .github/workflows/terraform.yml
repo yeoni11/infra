@@ -43,5 +43,5 @@ jobs:
 
       # 6. Terraform Apply (main 브랜치 push 할 때만 실행)
       - name: Terraform Apply
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve -parallelism=2
         working-directory: Terraform
