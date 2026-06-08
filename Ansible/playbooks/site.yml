@@ -1,1 +1,16 @@
-#내용
+---
+# ============================================================
+# site.yml — 인프라 전체 한 번에 실행
+# 실행: ansible-playbook playbooks/site.yml
+# ============================================================
+
+- import_playbook: common.yml
+- import_playbook: dns.yml
+- import_playbook: vault.yml
+- import_playbook: haproxy.yml
+- import_playbook: nexus.yml
+- import_playbook: k8s.yml
+- import_playbook: minio.yml
+- import_playbook: cicd.yml
+- import_playbook: monitor.yml
+- import_playbook: siem.yml
