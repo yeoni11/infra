@@ -3,4 +3,5 @@
   hosts: nexus
   become: true
   roles:
+    - common
     - nexus
