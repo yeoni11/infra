@@ -9,6 +9,7 @@
   hosts: k8s_master
   become: true
   roles:
+    # 반드시 맨 아래에 Helm 설치 스크립트가 포함되어 있어야 합니다.
     - k8s_master
 
 - name: K8s Worker | 워커 노드 클러스터 조인
@@ -16,3 +17,74 @@
   become: true
   roles:
     - k8s_worker
+
+# 별도 roles 폴더 없이, 여기서 직접 tasks로 Proxmox Ceph를 연동합니다.
+- name: Ceph CSI | Proxmox 외부 Ceph 스토리지 클래스 연동
+  hosts: k8s_master
+  become: true
+  vars:
+    # Proxmox Ceph Monitor IP 주소들만 적어야 합니다. (6789 포트)
+    ceph_monitors:
+      - "192.168.34.101:6789"
+      - "192.168.34.102:6789"
+      - "192.168.34.103:6789"
+    # Proxmox Ceph에서 확인한 admin secret key
+    # `ceph auth get-key client.admin` 명령어로 확인 후 적어줘야 합니다.
+    ceph_admin_key: "AQDz6R9qmpMLNBAAgfjS9pKHWLLH2hLtFNcJdA=="
+    ceph_pool_name: "ceph-vmpool"
+
+  tasks:
+    - name: Ceph CSI | Helm 리포지토리 추가
+      ansible.builtin.command: helm repo add ceph-csi https://github.io
+      changed_when: false
+
+    - name: Ceph CSI | Helm 리포지토리 업데이트
+      ansible.builtin.command: helm repo update
+      changed_when: false
+
+    - name: Ceph CSI | Helm 차트를 이용해 RBD 드라이버 설치
+      ansible.builtin.command: >
+        helm upgrade --install ceph-csi-rbd ceph-csi/ceph-csi-rbd
+        --namespace kube-system
+        --set csiConfig[0].clusterID="proxmox-ceph-cluster"
+        --set csiConfig[0].monitors={{ ceph_monitors | to_json }}
+      changed_when: true
+
+    - name: Ceph CSI | 쿠버네티스 인증 Secret 생성
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: ceph-csi-rbd-secret
+            namespace: kube-system
+          type: kubernetes.io/opaque
+          stringData:
+            userID: "admin"
+            userKey: "{{ ceph_admin_key }}"
+
+    - name: Ceph CSI | StorageClass 생성 및 기본(Default) 지정
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: storage.k8s.io/v1
+          kind: StorageClass
+          metadata:
+            name: proxmox-ceph-sc
+            annotations:
+              storageclass.kubernetes.io/is-default-class: "true"
+          provisioner: ://ceph.com
+          allowVolumeExpansion: true
+          reclaimPolicy: Delete
+          volumeBindingMode: Immediate
+          parameters:
+            clusterID: "proxmox-ceph-cluster"
+            pool: "{{ ceph_pool_name }}"
+            imageFeatures: layering
+            csi.storage.k8s.io/provisioner-secret-name: ceph-csi-rbd-secret
+            csi.storage.k8s.io/provisioner-secret-namespace: kube-system
+            csi.storage.k8s.io/controller-expand-secret-name: ceph-csi-rbd-secret
+            csi.storage.k8s.io/controller-expand-secret-namespace: kube-system
+            csi.storage.k8s.io/node-stage-secret-name: ceph-csi-rbd-secret
+            csi.storage.k8s.io/node-stage-secret-namespace: kube-system
