@@ -1,1 +1,6 @@
-
+---
+- name: DNS | BIND9 네임서버 구성
+  hosts: dns
+  become: true
+  roles:
+    - dns
