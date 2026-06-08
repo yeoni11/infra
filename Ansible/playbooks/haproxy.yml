@@ -1,1 +1,6 @@
-#내용
+---
+- name: HAProxy | 로드밸런서 및 Keepalived 구성
+  hosts: haproxy
+  become: true
+  roles:
+    - haproxy
