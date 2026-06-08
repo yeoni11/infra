@@ -2,7 +2,7 @@ locals {
   vms = {
     # DNS
     "dns-01" = {
-      vmid        = 2211
+      vmid        = 211
       node        = "kosa2"
       template_id = 9001
       ip          = "172.16.30.11"
@@ -14,7 +14,7 @@ locals {
       gateway     = "172.16.30.1"
     }
     "dns-02" = {
-      vmid        = 2312
+      vmid        = 312
       node        = "kosa3"
       template_id = 9002
       ip          = "172.16.30.12"
@@ -28,7 +28,7 @@ locals {
 
     # Nexus
     "nexus-01" = {
-      vmid        = 2415
+      vmid        = 415
       node        = "kosa4"
       template_id = 9003
       ip          = "172.16.30.15"
@@ -42,7 +42,7 @@ locals {
 
     # Vault
     "vault-01" = {
-      vmid        = 2221
+      vmid        = 221
       node        = "kosa2"
       template_id = 9001
       ip          = "172.16.30.21"
@@ -54,7 +54,7 @@ locals {
       gateway     = "172.16.30.1"
     }
     "vault-02" = {
-      vmid        = 2322
+      vmid        = 322
       node        = "kosa3"
       template_id = 9002
       ip          = "172.16.30.22"
@@ -66,7 +66,7 @@ locals {
       gateway     = "172.16.30.1"
     }
     "vault-03" = {
-      vmid        = 2423
+      vmid        = 423
       node        = "kosa4"
       template_id = 9003
       ip          = "172.16.30.23"
@@ -80,7 +80,7 @@ locals {
 
     # HAProxy (VLAN 20)
     "haproxy-01" = {
-      vmid        = 2226
+      vmid        = 226
       node        = "kosa2"
       template_id = 9001
       ip          = "172.16.20.11"
@@ -92,7 +92,7 @@ locals {
       gateway     = "172.16.20.1"
     }
     "haproxy-02" = {
-      vmid        = 2327
+      vmid        = 327
       node        = "kosa3"
       template_id = 9002
       ip          = "172.16.20.12"
@@ -106,7 +106,7 @@ locals {
 
     # K8s Master
     "k8s-master-01" = {
-      vmid        = 2131
+      vmid        = 131
       node        = "kosa1"
       template_id = 9000
       ip          = "172.16.30.31"
@@ -118,7 +118,7 @@ locals {
       gateway     = "172.16.30.1"
     }
     "k8s-master-02" = {
-      vmid        = 2232
+      vmid        = 232
       node        = "kosa2"
       template_id = 9001
       ip          = "172.16.30.32"
@@ -130,7 +130,7 @@ locals {
       gateway     = "172.16.30.1"
     }
     "k8s-master-03" = {
-      vmid        = 2333
+      vmid        = 333
       node        = "kosa3"
       template_id = 9002
       ip          = "172.16.30.33"
@@ -144,7 +144,7 @@ locals {
 
     # K8s Worker
     "k8s-worker-plat" = {
-      vmid        = 2440
+      vmid        = 440
       node        = "kosa4"
       template_id = 9003
       ip          = "172.16.30.40"
@@ -156,7 +156,7 @@ locals {
       gateway     = "172.16.30.1"
     }
     "k8s-worker-01" = {
-      vmid        = 2141
+      vmid        = 141
       node        = "kosa1"
       template_id = 9000
       ip          = "172.16.30.41"
@@ -168,7 +168,7 @@ locals {
       gateway     = "172.16.30.1"
     }
     "k8s-worker-02" = {
-      vmid        = 2242
+      vmid        = 242
       node        = "kosa2"
       template_id = 9001
       ip          = "172.16.30.42"
@@ -180,7 +180,7 @@ locals {
       gateway     = "172.16.30.1"
     }
     "k8s-worker-03" = {
-      vmid        = 2343
+      vmid        = 343
       node        = "kosa3"
       template_id = 9002
       ip          = "172.16.30.43"
@@ -194,7 +194,7 @@ locals {
 
     # MinIO
     "minio-01" = {
-      vmid        = 2450
+      vmid        = 450
       node        = "kosa4"
       template_id = 9003
       ip          = "172.16.30.50"
@@ -208,7 +208,7 @@ locals {
 
     # CI/CD
     "cicd-01" = {
-      vmid        = 2360
+      vmid        = 360
       node        = "kosa3"
       template_id = 9002
       ip          = "172.16.30.60"
@@ -222,7 +222,7 @@ locals {
 
     # Monitoring
     "monitor-01" = {
-      vmid        = 2170
+      vmid        = 170
       node        = "kosa1"
       template_id = 9000
       ip          = "172.16.30.70"
@@ -236,7 +236,7 @@ locals {
 
     # SIEM
     "siem-01" = {
-      vmid        = 2280
+      vmid        = 280
       node        = "kosa2"
       template_id = 9001
       ip          = "172.16.30.80"
@@ -290,7 +290,8 @@ resource "proxmox_virtual_environment_vm" "vms" {
       }
     }
     user_account {
-      username = "ubuntu"
+      username = "kosa"
+      password = "kosa1004"
       keys     = var.ssh_public_keys
     }
   }
