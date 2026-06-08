@@ -1,1 +1,47 @@
-#내용
+---
+# ── 접속 공통 ──────────────────────────────────────────
+ansible_user: kosa
+ansible_ssh_private_key_file: ~/.ssh/id_ed25519
+ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+
+# ── 시스템 공통 ────────────────────────────────────────
+timezone: Asia/Seoul
+locale: en_US.UTF-8
+
+# ── 네트워크 ──────────────────────────────────────────
+domain: kosa.local          # 내부 도메인 (DNS role 참조)
+dns_servers:
+  - 172.16.30.11
+  - 172.16.30.12
+
+# ── Nexus (사설 저장소) ────────────────────────────────
+nexus_url: "http://172.16.30.15:8081"
+
+# ── Vault ─────────────────────────────────────────────
+vault_cluster_addr_01: "http://172.16.30.21:8200"
+vault_cluster_addr_02: "http://172.16.30.22:8200"
+vault_cluster_addr_03: "http://172.16.30.23:8200"
+vault_api_addr: "{{ vault_cluster_addr_01 }}"  # 기본 active 노드
+
+# ── HAProxy (K8s API VIP) ──────────────────────────────
+haproxy_vip: 172.16.20.10         # keepalived VIP
+k8s_api_port: 6443
+
+# ── Kubernetes ────────────────────────────────────────
+k8s_version: "1.30"
+pod_network_cidr: "10.244.0.0/16"  # Flannel 기본값
+service_cidr: "10.96.0.0/12"
+k8s_api_endpoint: "{{ haproxy_vip }}:{{ k8s_api_port }}"
+
+# ── MinIO ─────────────────────────────────────────────
+minio_endpoint: "http://172.16.30.50:9000"
+
+# ── CI/CD ─────────────────────────────────────────────
+cicd_url: "http://172.16.30.60:8080"
+
+# ── Monitoring ────────────────────────────────────────
+prometheus_url: "http://172.16.30.70:9090"
+grafana_url: "http://172.16.30.70:3000"
+
+# ── SIEM ─────────────────────────────────────────────
+siem_url: "http://172.16.30.80:5601"
